@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+# Kimi Code CLI Sandbox Policy
+#
+# This policy extends the default OpenShell sandbox policy to include
+# network access for Kimi Code CLI's API endpoints.
+
+version: 1
+
+# Inherit filesystem policy from base (read-only system, read-write workdir)
+filesystem:
+  read_only:
+    - /
+    - /etc/openshell-tls
+  read_write:
+    - /tmp
+    - /var/log
+  include_workdir: true
+
+# Network policy with Kimi API access
+network:
+  mode: Proxy
+  policies:
+    # Kimi Code API (Moonshot AI)
+    - name: kimi-api
+      host: api.moonshot.cn
+      port: 443
+      action: allow
+    # Kimi Code OAuth/Authentication
+    - name: kimi-auth
+      host: kimi.moonshot.cn
+      port: 443
+      action: allow
+    # Fallback for potential alternative endpoints
+    - name: moonshot-api
+      host: "*.moonshot.cn"
+      port: 443
+      action: allow
+
+# Landlock compatibility
+landlock:
+  compatibility: BestEffort
+
+# Process settings
+process:
+  run_as_user: sandbox
+  run_as_group: sandbox
