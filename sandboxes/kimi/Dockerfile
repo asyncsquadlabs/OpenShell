@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.4
+
 # SPDX-FileCopyrightText: Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
@@ -9,7 +11,8 @@
 #
 # Usage: openshell sandbox create --from kimi
 
-FROM ghcr.io/nvidia/openshell-community/sandboxes/base:latest
+ARG BASE_IMAGE=ghcr.io/nvidia/openshell-community/sandboxes/base:latest
+FROM ${BASE_IMAGE}
 
 USER root
 
@@ -38,11 +41,14 @@ RUN UV_TOOL_DIR="/sandbox/.uv/tools" \
 # Copy sandbox policy
 COPY policy.yaml /etc/openshell/policy.yaml
 
+# Create Kimi config directory (Kimi stores config in ~/.kimi/config.toml)
+RUN mkdir -p /sandbox/.kimi && \
+    chown sandbox:sandbox /sandbox/.kimi
+
 # Switch back to sandbox user
 USER sandbox
 
 # Verify installation
 RUN kimi --version
 
-# Default command (can be overridden at runtime)
-CMD ["kimi"]
+ENTRYPOINT ["/bin/bash"]

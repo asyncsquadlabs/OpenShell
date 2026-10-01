@@ -11,6 +11,18 @@ Kimi Code CLI is an AI agent that runs in the terminal, helping you complete sof
 - Search and fetch web pages
 - Autonomously plan and adjust actions during execution
 
+## Build
+
+```bash
+docker build -t kimi-sandbox .
+```
+
+To build against a specific base image:
+
+```bash
+docker build -t kimi-sandbox --build-arg BASE_IMAGE=ghcr.io/nvidia/openshell-community/sandboxes/base:latest .
+```
+
 ## Usage
 
 Create a sandbox with Kimi pre-installed. Bare `--from kimi` resolves against the
@@ -55,7 +67,7 @@ See the [Kimi Code CLI documentation](https://moonshotai.github.io/kimi-cli/) fo
 
 ## Policy
 
-This sandbox inherits the default OpenShell policy. You may need to add network policies for Kimi's API endpoints depending on your provider (e.g., `api.moonshot.cn` for Kimi Code).
+This sandbox ships its own `policy.yaml` rather than inheriting the default OpenShell policy. Network access is proxied and restricted to the Kimi/Moonshot API endpoints (`api.moonshot.cn`, `kimi.moonshot.cn`, and `*.moonshot.cn` on port 443); all other network traffic is blocked. Note that under the default OpenShell policy all network access is blocked, so it is these allow rules that let Kimi Code CLI reach its API. If you configure Kimi to use a different provider, add its endpoints to the network policy.
 
 ## See Also
 

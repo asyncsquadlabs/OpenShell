@@ -20,7 +20,7 @@ filesystem_policy:
 
 # Landlock compatibility
 landlock:
-  compatibility: BestEffort
+  compatibility: best_effort
 
 # Process settings
 process:
