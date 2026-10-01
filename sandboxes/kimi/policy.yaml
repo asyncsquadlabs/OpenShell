@@ -1,0 +1,52 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+# Kimi Code CLI Sandbox Policy
+#
+# This policy extends the default OpenShell sandbox policy to include
+# network access for Kimi Code CLI's API endpoints.
+
+version: 1
+
+# Inherit filesystem policy from base (read-only system, read-write workdir)
+filesystem_policy:
+  include_workdir: true
+  read_only:
+    - /
+    - /etc/openshell-tls
+  read_write:
+    - /tmp
+    - /var/log
+
+# Landlock compatibility
+landlock:
+  compatibility: best_effort
+
+# Process settings
+process:
+  run_as_user: sandbox
+  run_as_group: sandbox
+
+# --- Network policies (queried per-CONNECT request) ---
+#
+# Kimi Code CLI has two authentication modes, both allowlisted below:
+#   * "Kimi Code" login (recommended): OAuth device-code flow against
+#     auth.kimi.com, with the managed API at api.kimi.com/coding/v1
+#     (default KIMI_CODE_BASE_URL).
+#   * Moonshot AI Open Platform API key: api.moonshot.ai (global region)
+#     or api.moonshot.cn (China region).
+# NOTE: OPA host matching uses exact equality, not glob — list hosts explicitly.
+network_policies:
+  kimi:
+    name: kimi
+    endpoints:
+      # Kimi Code OAuth (device-code flow; default KIMI_CODE_OAUTH_HOST)
+      - { host: auth.kimi.com, port: 443 }
+      # Kimi Code managed API (default KIMI_CODE_BASE_URL)
+      - { host: api.kimi.com, port: 443 }
+      # Moonshot AI Open Platform, API-key mode (global region)
+      - { host: api.moonshot.ai, port: 443 }
+      # Moonshot AI Open Platform, API-key mode (China region)
+      - { host: api.moonshot.cn, port: 443 }
+    binaries:
+      - { path: /usr/local/bin/kimi }
