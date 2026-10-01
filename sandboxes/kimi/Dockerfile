@@ -9,7 +9,8 @@
 # Kimi is an AI agent that runs in the terminal, helping with code editing,
 # project exploration, and task automation.
 #
-# Usage: openshell sandbox create --from kimi
+# Usage: openshell sandbox create \
+#            --from ghcr.io/asyncsquadlabs/openshell-community/sandboxes/kimi:latest
 
 ARG BASE_IMAGE=ghcr.io/nvidia/openshell-community/sandboxes/base:latest
 FROM ${BASE_IMAGE}

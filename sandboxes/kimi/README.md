@@ -67,7 +67,7 @@ See the [Kimi Code CLI documentation](https://moonshotai.github.io/kimi-cli/) fo
 
 ## Policy
 
-This sandbox ships its own `policy.yaml` rather than inheriting the default OpenShell policy. Network access is proxied and restricted to the Kimi/Moonshot API endpoints (`api.moonshot.cn`, `kimi.moonshot.cn`, and `*.moonshot.cn` on port 443); all other network traffic is blocked. Note that under the default OpenShell policy all network access is blocked, so it is these allow rules that let Kimi Code CLI reach its API. If you configure Kimi to use a different provider, add its endpoints to the network policy.
+This sandbox ships its own `policy.yaml` rather than inheriting the default OpenShell policy. Network access is proxied and restricted to the Kimi/Moonshot API endpoints (`auth.kimi.com` and `api.kimi.com` for the "Kimi Code" OAuth login, plus `api.moonshot.ai` and `api.moonshot.cn` for API-key mode, all on port 443); all other network traffic is blocked. Note that under the default OpenShell policy all network access is blocked, so it is these allow rules that let Kimi Code CLI reach its API. If you configure Kimi to use a different provider or a custom `KIMI_CODE_BASE_URL`, add its endpoints to the network policy.
 
 ## See Also
 
