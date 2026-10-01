@@ -27,31 +27,26 @@ process:
   run_as_user: sandbox
   run_as_group: sandbox
 
-# Network policies allowing the kimi binary to reach Kimi API endpoints.
-# Each policy is keyed by name and lists endpoints plus the binaries that
-# are allowed to use them.
+# --- Network policies (queried per-CONNECT request) ---
+#
+# Kimi Code CLI has two authentication modes, both allowlisted below:
+#   * "Kimi Code" login (recommended): OAuth device-code flow against
+#     auth.kimi.com, with the managed API at api.kimi.com/coding/v1
+#     (default KIMI_CODE_BASE_URL).
+#   * Moonshot AI Open Platform API key: api.moonshot.ai (global region)
+#     or api.moonshot.cn (China region).
+# NOTE: OPA host matching uses exact equality, not glob — list hosts explicitly.
 network_policies:
-  # Kimi Code API (Moonshot AI)
-  kimi-api:
-    name: kimi-api
+  kimi:
+    name: kimi
     endpoints:
-      - host: api.moonshot.cn
-        port: 443
+      # Kimi Code OAuth (device-code flow; default KIMI_CODE_OAUTH_HOST)
+      - { host: auth.kimi.com, port: 443 }
+      # Kimi Code managed API (default KIMI_CODE_BASE_URL)
+      - { host: api.kimi.com, port: 443 }
+      # Moonshot AI Open Platform, API-key mode (global region)
+      - { host: api.moonshot.ai, port: 443 }
+      # Moonshot AI Open Platform, API-key mode (China region)
+      - { host: api.moonshot.cn, port: 443 }
     binaries:
-      - path: /usr/local/bin/kimi
-  # Kimi Code OAuth/Authentication
-  kimi-auth:
-    name: kimi-auth
-    endpoints:
-      - host: kimi.moonshot.cn
-        port: 443
-    binaries:
-      - path: /usr/local/bin/kimi
-  # Fallback for potential alternative endpoints
-  moonshot-api:
-    name: moonshot-api
-    endpoints:
-      - host: "*.moonshot.cn"
-        port: 443
-    binaries:
-      - path: /usr/local/bin/kimi
+      - { path: /usr/local/bin/kimi }
