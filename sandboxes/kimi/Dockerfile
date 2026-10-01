@@ -21,6 +21,9 @@ RUN uv tool install --python 3.13 kimi-cli
 # uv installs tools to ~/.local/bin by default
 ENV PATH="/root/.local/bin:${PATH}"
 
+# Copy sandbox policy
+COPY policy.yaml /etc/openshell/policy.yaml
+
 # Switch back to sandbox user
 USER sandbox
 
