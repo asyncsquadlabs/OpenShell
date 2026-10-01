@@ -9,34 +9,14 @@
 version: 1
 
 # Inherit filesystem policy from base (read-only system, read-write workdir)
-filesystem:
+filesystem_policy:
+  include_workdir: true
   read_only:
     - /
     - /etc/openshell-tls
   read_write:
     - /tmp
     - /var/log
-  include_workdir: true
-
-# Network policy with Kimi API access
-network:
-  mode: Proxy
-  policies:
-    # Kimi Code API (Moonshot AI)
-    - name: kimi-api
-      host: api.moonshot.cn
-      port: 443
-      action: allow
-    # Kimi Code OAuth/Authentication
-    - name: kimi-auth
-      host: kimi.moonshot.cn
-      port: 443
-      action: allow
-    # Fallback for potential alternative endpoints
-    - name: moonshot-api
-      host: "*.moonshot.cn"
-      port: 443
-      action: allow
 
 # Landlock compatibility
 landlock:
@@ -46,3 +26,32 @@ landlock:
 process:
   run_as_user: sandbox
   run_as_group: sandbox
+
+# Network policies allowing the kimi binary to reach Kimi API endpoints.
+# Each policy is keyed by name and lists endpoints plus the binaries that
+# are allowed to use them.
+network_policies:
+  # Kimi Code API (Moonshot AI)
+  kimi-api:
+    name: kimi-api
+    endpoints:
+      - host: api.moonshot.cn
+        port: 443
+    binaries:
+      - path: /usr/local/bin/kimi
+  # Kimi Code OAuth/Authentication
+  kimi-auth:
+    name: kimi-auth
+    endpoints:
+      - host: kimi.moonshot.cn
+        port: 443
+    binaries:
+      - path: /usr/local/bin/kimi
+  # Fallback for potential alternative endpoints
+  moonshot-api:
+    name: moonshot-api
+    endpoints:
+      - host: "*.moonshot.cn"
+        port: 443
+    binaries:
+      - path: /usr/local/bin/kimi
