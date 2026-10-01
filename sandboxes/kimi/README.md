@@ -13,11 +13,25 @@ Kimi Code CLI is an AI agent that runs in the terminal, helping you complete sof
 
 ## Usage
 
-Create a sandbox with Kimi pre-installed:
+Create a sandbox with Kimi pre-installed. Bare `--from kimi` resolves against the
+upstream NVIDIA community registry, where this sandbox is not published, so use the
+full image reference published by this fork:
 
 ```bash
+openshell sandbox create --from ghcr.io/asyncsquadlabs/openshell-community/sandboxes/kimi:latest
+```
+
+Alternatively, point the community registry override at the fork's namespace and keep
+the short form:
+
+```bash
+export OPENSHELL_COMMUNITY_REGISTRY=ghcr.io/asyncsquadlabs/openshell-community/sandboxes
 openshell sandbox create --from kimi
 ```
+
+The upstream home for community sandboxes is
+[NVIDIA/OpenShell-Community](https://github.com/NVIDIA/OpenShell-Community), where this
+sandbox may be contributed later.
 
 Once inside the sandbox, start Kimi:
 

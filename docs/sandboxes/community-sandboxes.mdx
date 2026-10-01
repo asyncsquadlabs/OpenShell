@@ -24,7 +24,7 @@ The following community sandboxes are available in the catalog.
 | Sandbox | Description |
 |---|---|
 | `base` | Foundational image with system tools and dev environment |
-| `kimi` | [Kimi Code CLI](https://github.com/MoonshotAI/kimi-cli) pre-installed for AI-assisted development |
+| `kimi` | [Kimi Code CLI](https://github.com/MoonshotAI/kimi-cli) pre-installed for AI-assisted development. In this fork the image is published at `ghcr.io/asyncsquadlabs/openshell-community/sandboxes/kimi`; bare `--from kimi` expands to the upstream NVIDIA registry (`DEFAULT_COMMUNITY_REGISTRY`), so pass the full image ref or set `OPENSHELL_COMMUNITY_REGISTRY=ghcr.io/asyncsquadlabs/openshell-community/sandboxes`. |
 | `ollama` | Ollama with cloud and local model support, Claude Code, OpenCode, and Codex pre-installed. Use `ollama launch` inside the sandbox to start coding agents with zero config.
 | `openclaw` | Open agent manipulation and control |
 | `sdg` | Synthetic data generation workflows |
